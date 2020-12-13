@@ -1,6 +1,7 @@
 package api;
 
 public class edgeData implements edge_data {
+	private int nothing;
 private node_data src;
 private node_data dest;
 private String info;

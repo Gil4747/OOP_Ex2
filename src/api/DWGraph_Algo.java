@@ -31,6 +31,7 @@ import java.io.IOException;
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonParser;
+import org.json.simple.parser.ParseException;
 
 
 public class DWGraph_Algo implements dw_graph_algorithms {
@@ -38,6 +39,9 @@ public class DWGraph_Algo implements dw_graph_algorithms {
 
 	public DWGraph_Algo() {
 		this.graph= new DWGraph_DS();
+	}
+	public DWGraph_Algo(DWGraph_DS G) {
+		this.graph= G;
 	}
 
 	@Override
@@ -203,35 +207,65 @@ public class DWGraph_Algo implements dw_graph_algorithms {
 
 	@Override
 	public boolean load(String file) {
-
-		try {
-			try{FileReader reader = new FileReader((file));
-			JSONParser parser = new JSONParser();
-			// JsonReader jsonReader= reader;
-			JSONObject jsonObject = (JSONObject)parser.parse(reader);
-			JSONArray Edges = (JSONArray)jsonObject.get("Edges");
-			JSONArray Nodes = (JSONArray)jsonObject.get("Nodes");
-			//System.out.println(Nodes.toString());
-			DWGraph_DS g = new DWGraph_DS();
-			for(int i=0;i<Nodes.length();i++){
-				JSONParser parser1 = new JSONParser();
-				JSONObject NodeD = (JSONObject) parser1.parse(Nodes.get(i).toString());
-				String[] s = NodeD.get("pos").toString().split(",");
-				geo_location location1=new geoLocation(Double.parseDouble(s[0]),Double.parseDouble(s[1]),Double.parseDouble(s[2]));
-				nodeData node = new nodeData((int)Double.parseDouble(NodeD.get("id").toString()),location1);
-				g.addNode(node);
+		if (file.charAt(0) == '{') {
+			try {
+				JSONObject jsonObject = new JSONObject(file);
+				JSONArray Edges = (JSONArray) jsonObject.get("Edges");
+				JSONArray Nodes = (JSONArray) jsonObject.get("Nodes");
+				//System.out.println(Nodes.toString());
+				DWGraph_DS g = new DWGraph_DS();
+				for (int i = 0; i < Nodes.length(); i++) {
+					JSONParser parser1 = new JSONParser();
+					JSONObject NodeD = new JSONObject(Nodes.get(i).toString());
+					String[] s = NodeD.get("pos").toString().split(",");
+					geo_location location1 = new geoLocation(Double.parseDouble(s[0]), Double.parseDouble(s[1]), Double.parseDouble(s[2]));
+					nodeData node = new nodeData((int) Double.parseDouble(NodeD.get("id").toString()), location1);
+					g.addNode(node);
+				}
+				for (int i = 0; i < Edges.length(); i++) {
+					JSONParser parser1 = new JSONParser();
+					JSONObject NodeD = new JSONObject(Edges.get(i).toString());
+					g.connect((int) Double.parseDouble(NodeD.get("src").toString()), (int) Double.parseDouble(NodeD.get("dest").toString()), Double.parseDouble(NodeD.get("w").toString()));
+				}
+				init(g);
+			} catch (JSONException e) {
+				return false;
 			}
-			for(int i=0;i<Edges.length();i++){
-				JSONParser parser1 = new JSONParser();
-				JSONObject NodeD = (JSONObject) parser1.parse(Edges.get(i).toString());
-				g.connect((int)Double.parseDouble(NodeD.get("src").toString()),(int)Double.parseDouble(NodeD.get("dest").toString()),Double.parseDouble(NodeD.get("w").toString()));
+			try {
+				try {
+					FileReader reader = new FileReader((file));
+					JSONParser parser = new JSONParser();
+					// JsonReader jsonReader= reader;
+					JSONObject jsonObject = (JSONObject) parser.parse(reader);
+					JSONArray Edges = (JSONArray) jsonObject.get("Edges");
+					JSONArray Nodes = (JSONArray) jsonObject.get("Nodes");
+					//System.out.println(Nodes.toString());
+					DWGraph_DS g = new DWGraph_DS();
+					for (int i = 0; i < Nodes.length(); i++) {
+						JSONParser parser1 = new JSONParser();
+						JSONObject NodeD = (JSONObject) parser1.parse(Nodes.get(i).toString());
+						String[] s = NodeD.get("pos").toString().split(",");
+						geo_location location1 = new geoLocation(Double.parseDouble(s[0]), Double.parseDouble(s[1]), Double.parseDouble(s[2]));
+						nodeData node = new nodeData((int) Double.parseDouble(NodeD.get("id").toString()), location1);
+						g.addNode(node);
+					}
+					for (int i = 0; i < Edges.length(); i++) {
+						JSONParser parser1 = new JSONParser();
+						JSONObject NodeD = (JSONObject) parser1.parse(Edges.get(i).toString());
+						g.connect((int) Double.parseDouble(NodeD.get("src").toString()), (int) Double.parseDouble(NodeD.get("dest").toString()), Double.parseDouble(NodeD.get("w").toString()));
+					}
+					init(g);
+				} catch (FileNotFoundException e) {
+					return false;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				return false;
 			}
-			init(g);}catch (FileNotFoundException e) {return false;}
-		} catch(Exception e) {
-			e.printStackTrace();
-			return false;
+			return true;
 		}
 		return true;
+
 	}
 
 
