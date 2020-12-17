@@ -2,20 +2,21 @@ package api;
 
 public class edgeData implements edge_data {
 	private int nothing;
-private node_data src;
-private node_data dest;
-private String info;
-private int tag;
-private double weight;
+	private node_data src;
+	private node_data dest;
+	private String info;
+	private int tag;
+	private double weight;
 
-public edgeData(node_data src, node_data dest) {
-	this.src=src;
-	this.dest=dest;
-	this.weight=src.getLocation().distance(dest.getLocation());
-	this.tag=0;
-	this.info="";
-	
-}
+	public edgeData(node_data src, node_data dest) {
+		this.src = src;
+		this.dest = dest;
+		this.weight = src.getLocation().distance(dest.getLocation());
+		this.tag = 0;
+		this.info = "";
+
+	}
+
 	@Override
 	public int getSrc() {
 		return this.src.getKey();
@@ -38,8 +39,8 @@ public edgeData(node_data src, node_data dest) {
 
 	@Override
 	public void setInfo(String s) {
-		this.info=s;
-		
+		this.info = s;
+
 	}
 
 	@Override
@@ -49,8 +50,8 @@ public edgeData(node_data src, node_data dest) {
 
 	@Override
 	public void setTag(int t) {
-		this.tag=t;
-		
+		this.tag = t;
+
 	}
 
 }

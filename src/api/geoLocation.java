@@ -28,8 +28,16 @@ public class geoLocation implements geo_location{
 
     @Override
     public double distance(geo_location g) {
+//        double dx = this.x() - p2.x();
+//        double dy = this.y() - p2.y();
+//        double dz = this.z() - p2.z();
+//        double t = (dx*dx+dy*dy+dz*dz);
+//        return Math.sqrt(t);
+//    }
+
+
         if (g==null||g==this||(g.x()==this.x&&g.y()==this.y&&g.z()==this.z))
             return 0;
-        return Math.pow((Math.pow(this.x+g.x(),2))+(Math.pow(this.y+g.y(),2))+(Math.pow(this.z+g.z(),2)),0.5);
+        return Math.sqrt((Math.pow(this.x-g.x(),2))+(Math.pow(this.y-g.y(),2))+(Math.pow(this.z-g.z(),2)));
     }
 }
