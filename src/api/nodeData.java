@@ -1,5 +1,7 @@
 package api;
 
+import java.util.Objects;
+
 public class nodeData implements node_data{
 	private static int id=0;
 	private int key;
@@ -139,4 +141,17 @@ public class nodeData implements node_data{
    public static double getMinY() {
        return minY;
    }
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		nodeData nodeData = (nodeData) o;
+		return key == nodeData.key && Double.compare(nodeData.weight, weight) == 0 && tag == nodeData.tag && dist == nodeData.dist && Objects.equals(info, nodeData.info) && location.equals(nodeData.location);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(key, weight, info, tag, dist, location);
+	}
 }

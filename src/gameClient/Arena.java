@@ -1,9 +1,6 @@
 package gameClient;
 
-import api.directed_weighted_graph;
-import api.edge_data;
-import api.geo_location;
-import api.node_data;
+import api.*;
 import gameClient.util.Point3D;
 import gameClient.util.Range;
 import gameClient.util.Range2D;
@@ -22,6 +19,7 @@ import java.util.List;
  *
  */
 public class Arena {
+	private long timer;
 	public static final double EPS1 = 0.001, EPS2=EPS1*EPS1, EPS=EPS2;
 	private directed_weighted_graph _gg;
 	private List<CL_Agent> _agents;
@@ -38,6 +36,15 @@ public class Arena {
 		this.setAgents(r);
 		this.setPokemons(p);
 	}
+
+	public void setTimer(long timer) {
+		this.timer = timer;
+	}
+
+	public long getTimer() {
+		return timer;
+	}
+
 	public void setPokemons(List<CL_Pokemon> f) {
 		this._pokemons = f;
 	}

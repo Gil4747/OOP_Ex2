@@ -35,14 +35,14 @@ public class MyFrame extends JFrame{
 	}
 
 	private void updateFrame() {
-		Range rx = new Range(20,this.getWidth()-20);
-		Range ry = new Range(this.getHeight()-10,150);
+		Range rx = new Range(20,this.getWidth()-25);
+		Range ry = new Range(this.getHeight()-20,150);
 		Range2D frame = new Range2D(rx,ry);
 		directed_weighted_graph g = _ar.getGraph();
 		_w2f = Arena.w2f(g,frame);
 	}
 		public void paint(Graphics g) {
-		BufferedImage bufferedImage = new BufferedImage(1500, 1200, BufferedImage.TYPE_INT_RGB);
+		BufferedImage bufferedImage = new BufferedImage(2000, 1200, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g2d = bufferedImage.createGraphics();
 		int w = this.getWidth();
 		int h = this.getHeight();
@@ -53,17 +53,26 @@ public class MyFrame extends JFrame{
 		drawGraph(g2d);
 		drawAgants(g2d);
 		drawInfo(g2d);
+		drawTimer(g2d);
 			Image buffer_image = createImage(w, h);
 		Graphics2D g2dComponent = (Graphics2D) g;
 		g2dComponent.drawImage(bufferedImage, null, 0, 0);
 
 	}
 	private void drawInfo(Graphics g) {
+
 		List<String> str = _ar.get_info();
 		String dt = "none";
 		for(int i=0;i<str.size();i++) {
 			g.drawString(str.get(i)+" dt: "+dt,100,60+i*20);
 		}
+
+	}
+	private void drawTimer(Graphics g) {
+
+		long dt = _ar.getTimer();
+		g.setColor(Color.yellow);
+		g.drawString("time to end: "+(int)dt/1000,50,50);
 
 	}
 	private void drawGraph(Graphics g) {
@@ -117,6 +126,7 @@ public class MyFrame extends JFrame{
 
 					geo_location fp = this._w2f.world2frame(c);
 					g.fillOval((int)fp.x()-r, (int)fp.y()-r, 2*r, 2*r);
+					g.drawString(""+rs.get(i-1).getValue(), (int)fp.x(), (int)fp.y()-4*r);
 				}
 			}
 		}

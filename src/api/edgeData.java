@@ -1,5 +1,7 @@
 package api;
 
+import java.util.Objects;
+
 public class edgeData implements edge_data {
 	private int nothing;
 	private node_data src;
@@ -12,6 +14,14 @@ public class edgeData implements edge_data {
 		this.src = src;
 		this.dest = dest;
 		this.weight = src.getLocation().distance(dest.getLocation());
+		this.tag = 0;
+		this.info = "";
+
+	}
+	public edgeData(node_data src, node_data dest, double w) {
+		this.src = src;
+		this.dest = dest;
+		this.weight = w;
 		this.tag = 0;
 		this.info = "";
 
@@ -54,4 +64,16 @@ public class edgeData implements edge_data {
 
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		edgeData edgeData = (edgeData) o;
+		return nothing == edgeData.nothing && tag == edgeData.tag && Double.compare(edgeData.weight, weight) == 0 && src.equals(edgeData.src) && dest.equals(edgeData.dest) && Objects.equals(info, edgeData.info);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(nothing, src, dest, info, tag, weight);
+	}
 }

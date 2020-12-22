@@ -50,7 +50,7 @@ public DWGraph_DS(DWGraph_DS g) {
 	public void connect(int src, int dest, double w) {
 		if(!nodes.containsKey(src)||!nodes.containsKey(dest))
 			return;
-		edge_data goedge =new edgeData(this.nodes.get(src),this.nodes.get(dest)) ;
+		edge_data goedge =new edgeData(this.nodes.get(src),this.nodes.get(dest),w) ;
 		go.get(src).put(dest,goedge);
 		back.get(dest).put(src, goedge);
 		edges++;

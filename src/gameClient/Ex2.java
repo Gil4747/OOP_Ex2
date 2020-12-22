@@ -13,6 +13,7 @@ import static java.lang.System.exit;
 public class Ex2 implements Runnable {
     private static MyFrame _win;
     private static Arena _ar;
+    private static HashMap<Integer, Integer> agVal = new HashMap<>();
     private static HashMap<Integer, edge_data> choose = new HashMap<>();
     private static int scenario_num = -1;
     private static boolean auto = false;
@@ -23,40 +24,30 @@ public class Ex2 implements Runnable {
 
     @Override
     public void run() {
-        //int scenario_num = 11;
+        int scenario_num = 13;
         JFrame f = new JFrame();
-        game_service ggg=Game_Server_Ex2.getServer(0);
-       // game_service game = Game_Server_Ex2.getServer(scenario_num); // you have [0,23] games
-       // JFrame f = new JFrame();
-        try {
-            if (JOptionPane.showConfirmDialog(f, "Do you want to connect the server?", "Start Game",
-                    JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                int id = Integer.parseInt(JOptionPane.showInputDialog(f, "Pls enter ID "));
-                //  int id = 315203067;
-                ggg.login(id);
+//        game_service game = Game_Server_Ex2.getServer(scenario_num); // you have [0,23] games
+//        try {
+//            if (JOptionPane.showConfirmDialog(f, "Do you want to connect the server?", "Start Game",
+//                    JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+//                int id = Integer.parseInt(JOptionPane.showInputDialog(f, "Pls enter ID "));
+//                //  int id = 315203067;
+//                game.login(id);
+//
+//
+//            }
+//        } catch (Exception e) {
+//            JOptionPane.showMessageDialog(f, "something went wrong I'il continue now.. ");
+//        }
+//            try {
+//                scenario_num = Integer.parseInt(JOptionPane.showInputDialog(f, "Pls select level between 0-23 "));
+//
+//            } catch (Exception e){
+//
+//                exit(1);
+//            }
 
-
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(f, "something went wrong I'il continue now.. ");
-        }
-       //KmlForGame kmlForGame = new KmlForGame();
-        try {
-            auto =  JOptionPane.showConfirmDialog(f, "Do you want auto game?", "Start Game",
-                    JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
-        } catch (Exception e){
-            exit(1);
-        }
-        while (!(scenario_num <=23&&scenario_num>=0)) {
-            try {
-                scenario_num = Integer.parseInt(JOptionPane.showInputDialog(f, "Pls select level between 0-23 "));
-
-            } catch (Exception e){
-
-                exit(1);
-            }
-
-            game_service game = Game_Server_Ex2.getServer(scenario_num); // you have [0,23] games
+        game_service game = Game_Server_Ex2.getServer(scenario_num); // you have [0,23] games
 
         String g = game.getGraph();
         String pks = game.getPokemons();
@@ -84,8 +75,7 @@ public class Ex2 implements Runnable {
 
         System.out.println(res);
         exit(0);
-    }}
-
+    }
     /**
      * Moves each of the agents along the edge,
      * in case the agent is on a node the next destination (next edge) is chosen (randomly).
@@ -94,7 +84,8 @@ public class Ex2 implements Runnable {
      * @param gg
      * @param
      */
-    private static synchronized void moveAgants(game_service game, directed_weighted_graph gg) {
+    private static  void moveAgants(game_service game, directed_weighted_graph gg) {
+        _ar.setTimer(game.timeToEnd());
         String lg = game.move();
         List<CL_Agent> log = Arena.getAgents(lg, gg);
         _ar.setAgents(log);
@@ -108,6 +99,7 @@ public class Ex2 implements Runnable {
             int dest = ag.getNextNode();
             int src = ag.getSrcNode();
             double v = ag.getValue();
+
             for(edge_data e:choose.values()){
                 if(e.getDest()==dest|| e.getSrc()==dest)
                     dest = nextNode(game, ag);
@@ -117,6 +109,8 @@ public class Ex2 implements Runnable {
                 game.chooseNextEdge(ag.getID(), dest);
                 System.out.println("Agent: " + id + ", val: " + v + "   turned to node: " + dest);
             }
+            agVal.put(ag.getID(),ag.getSrcNode());
+
         }
     }
 
@@ -124,18 +118,22 @@ public class Ex2 implements Runnable {
      * a very simple random walk implementation!
      *
      * @param g
-     * @param
-     * @return
+     * @param ag
+     * @return ans ---> the next node for that agent
      */
-    private static synchronized int nextNode(game_service g, CL_Agent ag) {
+    private static  int nextNode(game_service g, CL_Agent ag) {
         int ans = -1;
-        if(choose.get(ag.getID())!=null&&ag.getSrcNode()==choose.get(ag.getID()).getDest())
-            closestPoc(g,ag);
+        if(choose.get(ag.getID())!=null&&ag.getSrcNode()==choose.get(ag.getID()).getDest()) {
+            if (choose.get(ag.getID()).getSrc()!=agVal.get(ag.getID()))
+                return choose.get(ag.getID()).getSrc();
+             else
+                 closestPoc(g, ag);
+        }
         if(choose.get(ag.getID())!=null&&ag.getSrcNode()==choose.get(ag.getID()).getSrc())
             return choose.get(ag.getID()).getDest();
         DWGraph_Algo algo =new DWGraph_Algo();
         algo.load(g.getGraph());
-        List<node_data> way= algo.shortestPath(ag.getSrcNode(),closestPoc(g,ag).getSrc());
+        List<node_data> way= algo.shortestPath(ag.getSrcNode(),choose.get(ag.getID()).getSrc());//closestPoc(g,ag).getSrc()
         if(way!=null&&way.size()>=2)
             ans=way.get(1).getKey();
         return ans;
@@ -181,6 +179,7 @@ public class Ex2 implements Runnable {
             }
             for(CL_Agent i: Arena.getAgents(game.getAgents(),_ar.getGraph())){
                 closestPoc(game,i);
+                agVal.put(i.getID(),i.getSrcNode());
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -203,17 +202,20 @@ public class Ex2 implements Runnable {
         }
         return null;
     }
-    public static synchronized edge_data closestPoc(game_service game, CL_Agent ag){
+    public static  edge_data closestPoc(game_service game, CL_Agent ag){
         DWGraph_Algo algo =new DWGraph_Algo();
         algo.load(game.getGraph());
         double shortest= Double.MAX_VALUE;
         edge_data ans=null;
         List<CL_Pokemon> pocs=Arena.json2Pokemons(game.getPokemons());
+        List<CL_Pokemon> copyPocs=Arena.json2Pokemons(game.getPokemons());
         for(CL_Pokemon i : pocs){
             if(choose.containsValue(updateEdge(i,algo.getGraph()))){
-                pocs.remove(i);
+
+                copyPocs.remove(i);
             }
         }
+        pocs=copyPocs;
         for(CL_Pokemon i: pocs){
             if (!choose.containsValue(updateEdge(i, algo.getGraph()))) {
             double temp = algo.shortestPathDist(ag.getSrcNode(),updateEdge(i,algo.getGraph()).getSrc());
