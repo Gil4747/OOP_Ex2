@@ -24,7 +24,7 @@ public class Ex2 implements Runnable {
 
     @Override
     public void run() {
-        int scenario_num = 19;
+        int scenario_num = 23;
         JFrame f = new JFrame();
 //        game_service game = Game_Server_Ex2.getServer(scenario_num); // you have [0,23] games
 //        try {
@@ -107,7 +107,7 @@ public class Ex2 implements Runnable {
             if (!exsit)
                 closestPoc(game,ag);
             for(edge_data e:choose.values()){
-                if(e.getDest()==dest|| e.getSrc()==dest)
+                if(e!=null&&(e.getDest()==dest|| e.getSrc()==dest))
                     dest = nextNode(game, ag);
             }
             if (dest == -1) {
@@ -224,7 +224,7 @@ public class Ex2 implements Runnable {
         }
         pocs=copyPocs;
         for(CL_Pokemon i: pocs){
-            if (!choose.containsValue(updateEdge(i, algo.getGraph()))) {
+            if (!choose.containsValue(updateEdge(i, algo.getGraph()))&&updateEdge(i, algo.getGraph()).getWeight()>0.26) {
             double temp = algo.shortestPathDist(ag.getSrcNode(),updateEdge(i,algo.getGraph()).getSrc());
             if(temp<shortest&&temp!=-1){
                 shortest=temp;
