@@ -1,9 +1,9 @@
 # OOP_Ex2
-## This README explains the 3rd asssinment we got on OOP course in Ariel university. 
-## the assinment has two parts:
+### This README explains the 3rd asssinment we got on OOP course in Ariel university. 
+### the assinment has two parts:
 
-### the first part is to create a directed weighted graph that represents real locations.
-### there were 5 classes for this part:
+#### the first part is to create a directed weighted graph that represents real locations.
+#### there were 5 classes for this part:
 
 - geoLocation is the most basic one, gives the location as x,y,z variables (represent coordinates and hight) 
 and distances between any two of them.
@@ -18,7 +18,7 @@ and distances between any two of them.
 shortest way between two nodes, they can save the graph as jason file and load graph in the same way.
 
 
-### The second part is to run the "Pokemons Game":
+#### The second part is to run the "Pokemons Game":
 
 The game has agents that can move only on the graph's edges. 
 Those agents should collect pokemons that spreds on the graph's edges.
