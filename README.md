@@ -33,7 +33,7 @@ The class init the game by asking what level to play, if to save the id of the p
 and where to locate the agents in the begining of the game.
 on every 10th of a second we moved the agents and choose for them the next move in the function 'nextNode'.
 
-The method works this way:
+#### The method works this way:
 
 First we choose a close location in the init part and locate the agents there.
 Then they move towords the pokemon by using shortest path method from DWGraph_Algo.
