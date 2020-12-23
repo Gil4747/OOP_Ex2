@@ -36,13 +36,14 @@ The class init the game by asking what level to play, if to save the id of the p
 and where to locate the agents in the begining of the game.
 on every 10th of a second we moved the agents and choose for them the next move in the function 'nextNode'.
 
-the method works this way:
-first we choose a close location in the init part and locate the agents there.
-they move towords the pokemon by using shortest path method from DWGraph_Algo.
-when they catch an pokemon(get close to its location) they search for another pokemon that hasn't taken by another agent yet.
+The method works this way:
+
+First we choose a close location in the init part and locate the agents there.
+Then they move towords the pokemon by using shortest path method from DWGraph_Algo.
+When they catch an pokemon(get close to its location) they search for another pokemon that hasn't taken by another agent yet.
 
 We used the class myFrame to show the game by using the jFrame methods the window shoes the graph,
 the pokemons and their type(represent on wich edge are they), the agents and their value (it updates every time the cought a pokemon) 
 and the time left untill the game will be over.
 
-this asssinment has written by Gil Zioni and Itamar Shpitzer.
+This asssinment has written by Gil Zioni and Itamar Shpitzer.
