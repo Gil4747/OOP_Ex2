@@ -13,6 +13,15 @@ public class geoLocation implements geo_location{
         this.x=x0;
         this.y=y0;
     }
+    /**
+     * Copy constructor
+     * @param g
+     */
+    public geoLocation(geo_location g){
+        this.x=g.x();
+        this.y=g.y();
+        this.z=g.z();
+    }
     @Override
     public double x() {
         return x;
@@ -27,22 +36,22 @@ public class geoLocation implements geo_location{
     public double z() {
         return z;
     }
-
+    /**
+     * Calculates the distance from the position of the object to the position we got in the function.
+     * @param g
+     * @return the distance between the two locations.
+     */
     @Override
     public double distance(geo_location g) {
-//        double dx = this.x() - p2.x();
-//        double dy = this.y() - p2.y();
-//        double dz = this.z() - p2.z();
-//        double t = (dx*dx+dy*dy+dz*dz);
-//        return Math.sqrt(t);
-//    }
-
-
         if (g==null||g==this||(g.x()==this.x&&g.y()==this.y&&g.z()==this.z))
             return 0;
         return Math.sqrt((Math.pow(this.x-g.x(),2))+(Math.pow(this.y-g.y(),2))+(Math.pow(this.z-g.z(),2)));
     }
-
+    /**
+     *Checks whether the position of the department is equal to what we got in the function.
+     * @param o
+     * @return true if they are equal and false if they are different.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

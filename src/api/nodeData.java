@@ -10,7 +10,6 @@ public class nodeData implements node_data{
 	private int tag;
 	private int dist=Integer.MAX_VALUE;
 	private geo_location location;
-	private static double maxY=10, maxX=10 , minX=-10, minY=-10;
 
 	public nodeData(){
 		this.key=id++;
@@ -21,10 +20,6 @@ public class nodeData implements node_data{
 	}
 
 	public nodeData(int key, geo_location location ){
-		maxX = Math.max(location.x(),maxX);
-		maxY = Math.max(location.y(),maxY);
-		minX = Math.min(location.x(),minX);
-		minY = Math.min(location.y(),minY);
 		this.key=key;  
 		this.tag=0;
 		this.dist=Integer.MAX_VALUE;
@@ -44,67 +39,94 @@ public class nodeData implements node_data{
 		this.dist=Integer.MAX_VALUE;
 		this.info="";
 	}
+	/**
+	 * Copy constructor
+	 * @param n
+	 */
 	 public nodeData(node_data n){
 	        id = n.getKey();
 	        if (id <=n.getKey())
 	            id = n.getKey()+1;
 	        this.location = new geoLocation(n.getLocation().x(),n.getLocation().y());
-	        maxX = Math.max(this.location.x(),maxX);
-	        maxY = Math.max(this.location.y(),maxY);
-	        minX = Math.min(this.location.x(),minX);
-	        minY = Math.min(this.location.y(),minY);
 	        weight = n.getWeight();
 	        info = n.getInfo();
 	        tag = n.getTag();
 	    }
 
-
+	/**
+	 * Returns the key (id) associated with this node.
+	 * @return
+	 */
 	@Override
 	public int getKey() {
 		return this.key;
 	}
-
+	/** Returns the location of this node, if
+	 * none return null.
+	 *
+	 * @return the location of the node.
+	 */
 	@Override
 	public geo_location getLocation() {
-		// TODO Auto-generated method stub
 		return location;
 	}
-
+	/**
+	 *
+	 * @param p - new new location  (position) of this node.
+	 */
 	@Override
 	public void setLocation(geo_location p) {
-		// TODO Auto-generated method stub
-
+		this.location=new geoLocation(p);
 	}
-
+	/**
+	 *
+	 * @return the weight of this node
+	 */
 	@Override
 	public double getWeight() {
 		return this.weight;
 	}
-
+	/**
+	 * Set weight to this node
+	 * @param w - the new weight
+	 */
 	@Override
 	public void setWeight(double w) {
 		this.weight=w;
 	}
-
+	/**
+	 *
+	 * @return info of the node
+	 */
 	@Override
 	public String getInfo() {
 		return this.info;
 	}
-
+	/**
+	 * Set info for the node
+	 * @param s
+	 */
 	@Override
 	public void setInfo(String s) {
 		this.info=s;	
 	}
-
+	/**
+	 *
+	 * @return tag in int of this node
+	 */
 	@Override
 	public int getTag() {
 		return this.tag;
 	}
-
+	/**
+	 *
+	 * @param t - the new value of the tag
+	 */
 	@Override
 	public void setTag(int t) {
 		this.tag=t;
 	}
+
 	public int getDist() {
 		return this.dist;	 
 	}
@@ -112,36 +134,11 @@ public class nodeData implements node_data{
 	public void setDist(int t) {
 		this.dist=t;
 	}
-	 /**
-    *
-    * @return return max of location x of all the nodes
-    */
-   public static double getMaxX() {
-       return maxX;
-   }
-	 /**
-    *
-    * @return return min of location x of all the nodes
-    */
-   public static double getMinX() {
-       return minX;
-   }
-   /**
-    *
-    * @return return max of location y of all the nodes
-    */
-
-   public static double getMaxY() {
-       return maxY;
-   }
-   /**
-    *
-    * @return return min of location y of all the nodes
-    */
-   public static double getMinY() {
-       return minY;
-   }
-
+	/**
+	 *Checks whether the vertex is equal to the object we got in the function.
+	 * @param o
+	 * @return true if the vertices are equal and false if not.
+	 */
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;

@@ -40,20 +40,33 @@ public class DWGraph_Algo implements dw_graph_algorithms {
 	public DWGraph_Algo() {
 		this.graph= new DWGraph_DS();
 	}
+	/**
+	 * init
+	 * @param G - the graph for the algorithms.
+	 */
 	public DWGraph_Algo(DWGraph_DS G) {
 		this.graph= G;
 	}
-
+	/**
+	 * Init the graph on which this set of algorithms operates on.
+	 * @param g
+	 */
 	@Override
 	public void init(directed_weighted_graph g) {
 		this.graph = (DWGraph_DS) g;
 	}
-
+	/**
+	 * Return the underlying graph of which this class works.
+	 * @return
+	 */
 	@Override
 	public directed_weighted_graph getGraph() {
 		return this.graph;
 	}
-
+	/**
+	 * Compute a deep copy of this weighted graph.
+	 * @return
+	 */
 	@Override
 	public directed_weighted_graph copy() {
 		DWGraph_DS copy = new DWGraph_DS();
@@ -69,7 +82,11 @@ public class DWGraph_Algo implements dw_graph_algorithms {
 		return copy;
 	}
 
-
+	/**
+	 * Returns true if and only if (iff) there is a valid path from EVREY node to each
+	 * other node. NOTE: assume directional graph - a valid path (a-->b) does NOT imply a valid path (b-->a).
+	 * @return true if the graph is connected and not if not
+	 */
 	@Override
 	public boolean isConnected() {
 		if(graph==null||graph.getV().size()==0||graph.getV().size()==1)
@@ -81,7 +98,12 @@ public class DWGraph_Algo implements dw_graph_algorithms {
 		}
 		return true;
 	}
-
+	/**
+	 * returns the length of the shortest path between src to dest, if no such path --> returns -1.
+	 * @param src - start node
+	 * @param dest - end (target) node
+	 * @return Distance of the src to dest in double
+	 */
 	@Override
 	public double shortestPathDist(int src, int dest) {
 		if(graph.getNode(src)==null||graph.getNode(dest)==null||shortestPath(src, dest)==null)
@@ -101,7 +123,14 @@ public class DWGraph_Algo implements dw_graph_algorithms {
 
 		return ans;
 	}
-
+	/**
+	 * returns the the shortest path between src to dest - as an ordered List of nodes:
+	 * src--> n1-->n2-->...dest
+	 * if no such path --> returns null;
+	 * @param src - start node
+	 * @param dest - end (target) node
+	 * @return the path of the way in list of node_data
+	 */
 	@Override
 	public List<node_data> shortestPath(int src, int dest) {
 		if (graph.getV().isEmpty() || graph.getV() == null || graph.nodeSize() == 0 || graph.nodeSize() == 1)
@@ -143,7 +172,13 @@ public class DWGraph_Algo implements dw_graph_algorithms {
 			return ans;
 		}		return null;
 	}
-
+	/**
+	 * Saves this weighted (directed) graph to the given
+	 * file name - in JSON format
+	 * @param file - the file name (may include a relative path).
+	 * @return true - iff the file was successfully saved
+	 * @throws FileNotFoundException
+	 */
 	@Override
 	public boolean save(String file) {
 		JSONArray ansE=new JSONArray();
@@ -204,7 +239,14 @@ public class DWGraph_Algo implements dw_graph_algorithms {
 		return true;
 	}
 
-
+	/**
+	 * This method load a graph to this graph algorithm.
+	 * if the file was successfully loaded - the underlying graph
+	 * of this class will be changed (to the loaded one), in case the
+	 * graph was not loaded the original graph should remain "as is".
+	 * @param file - file name of JSON file
+	 * @return true - iff the graph was successfully loaded.
+	 */
 	@Override
 	public boolean load(String file) {
 		if (file.charAt(0) == '{') {
@@ -268,21 +310,31 @@ public class DWGraph_Algo implements dw_graph_algorithms {
 
 	}
 
-
-	public boolean equals(DWGraph_DS sec) {
+	/**
+	 * Checks whether the class graph is equal to the graph we got from the function.
+	 *@param sec
+	 * @return true if they are equal and false if not.
+	 */
+	public boolean graph_equals(directed_weighted_graph sec) {
 		boolean yah=true;
 		if(this.graph.getV().size()!=sec.getV().size()) {
 			return false;
 		}
 		for(node_data i: this.graph.getV()) {
 			for(edge_data j: this.graph.getE(i.getKey()) ) {
-				yah&=sec.getEdge(i.getKey(), j.getDest()).getDest()
-						==this.graph.getEdge(i.getKey(), j.getDest()).getDest();
+				yah&=sec.getEdge(i.getKey(), j.getDest()).equals(this.graph.getEdge(i.getKey(), j.getDest()));
 			}
 		}
 		return yah;
 	}
-
+	/**
+	 *Dfs algorithm. The algorithm starts the search from a node in the graph
+	 * and advances along the graph until it gets stuck,
+	 * then it repeats its traces until it can choose to advance to the node it has not yet reached.
+	 *@param start-My starting point.
+	 * @param g-The graph I am going through.
+	 * @return the number of connected nodes.
+	 */
 	public int DFS(directed_weighted_graph g,node_data start) {
 		// hashmap saves all nodes which visited by bfs algorithm
 		Map<Integer, node_data> visited = new HashMap<Integer, node_data>();
@@ -308,7 +360,10 @@ public class DWGraph_Algo implements dw_graph_algorithms {
 		//returns the number of connected nodes
 		return ans;
 	}
-
+	/**
+	 * This function transpose on the graph and returns it after the change.
+	 *@return
+	 */
 	public directed_weighted_graph transpose() {
 		DWGraph_DS trans = new DWGraph_DS();
 		for (node_data i : graph.getV()) {
@@ -321,70 +376,13 @@ public class DWGraph_Algo implements dw_graph_algorithms {
 		}
 		return trans;
 	}
-	// the function set back the graph's node's tags to 0
+	/**
+	 * the function set back the graph's node's tags to 0.
+	 *@param hashMap
+	 */
 	public void cleanTags(Map<Integer, node_data> hashMap) {
 		hashMap.forEach((key, value) -> {
 			value.setTag(0);
 		});
 	}
-	/**
-	 * computes a relatively short path which visit each node in the targets List.
-	 * Note: this is NOT the classical traveling salesman problem,
-	 * as you can visit a node more than once, and there is no need to return to source node -
-	 * just a simple path going over all nodes in the list.
-	 * @param targets
-	 * @return the path of the way in list of node_data
-	 */
-
-	public List<node_data> TSP(List<Integer> targets) {
-		if (targets == null || targets.isEmpty()) return null;
-		if (graph.getV()!= null) {
-			for (node_data n : graph.getV()) {
-				n.setTag(0);
-			}
-		}
-		int i = 0;
-		List<node_data> ans = new LinkedList<node_data>();
-
-		HashMap<Integer,Boolean> hashMap = new LinkedHashMap<>();
-		while (i<targets.size()){
-			if(!hashMap.containsKey(targets.get(i))){
-				hashMap.put(targets.get(i),true);
-				i++;
-			}
-			else {
-				targets.remove(i);
-			}
-		}
-		i=0;
-		int temp = 0;
-		int temp2;
-		List<node_data> tempN;
-		if (!targets.isEmpty()) {
-			temp = targets.remove(0);
-		}
-		while (!targets.isEmpty()){
-			temp2 = targets.remove(0);
-			tempN = shortestPath(temp,temp2);
-			if(tempN == null) return null;
-			for (node_data nk: tempN){
-				if (targets.contains(nk.getKey())){
-					targets.remove((Integer)nk.getKey());
-				}
-			}
-			ans.addAll(tempN);
-			temp = temp2;
-		}
-
-		i = 0;
-		while (i < ans.size() - 1) {
-			if (ans.get(i).equals(ans.get(i + 1)))
-				ans.remove(i);
-			else
-				i++;
-		}
-	
-		return ans;
-	}
-
 }
