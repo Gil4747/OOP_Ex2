@@ -45,4 +45,4 @@ and the time left untill the game will be over.
 
 more explantions on this [wiki page](https://github.com/Gil4747/OOP_Ex2/wiki/ex2---general)
 
-##### This asssinment has written by [Gil Zioni](https://github.com/Gil4747) and [Itamar Shpitzer](https://github.com/ithamarSpitz).
+##### This asssinment has written by [Gil Zioni](https://github.com/Gil4747) and [Itamar Shpitzer](https://github.com/ithamarSpitz), the course git is [here](https://github.com/simon-pikalov/Ariel_OOP_2020).
