@@ -43,4 +43,6 @@ We used the class myFrame to show the game by using the jFrame methods the windo
 the pokemons and their type(represent on wich edge are they), the agents and their value (it updates every time the cought a pokemon) 
 and the time left untill the game will be over.
 
-##### This asssinment has written by Gil Zioni and Itamar Shpitzer.
+more explantions on this [wiki page](https://github.com/Gil4747/OOP_Ex2/wiki)
+
+##### This asssinment has written by [Gil Zioni](https://github.com/Gil4747) and [Itamar Shpitzer](https://github.com/ithamarSpitz), the course git is [here](https://github.com/simon-pikalov/Ariel_OOP_2020).
