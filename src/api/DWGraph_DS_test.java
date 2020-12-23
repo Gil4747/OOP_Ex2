@@ -88,6 +88,11 @@ public class DWGraph_DS_test {
             assertNotNull(node);
         }
     }
+    /**
+     *Checks whether the arc connection worked according to the following rules:
+     * Connect an edge between node1 and node2, with an edge with weight >=0.
+     * if the edge node1-node2 already exists - the method simply updates the weight of the edge.
+     */
     @Test
     void connect() {
         directed_weighted_graph g= new DWGraph_DS();
@@ -181,7 +186,13 @@ public class DWGraph_DS_test {
         g0.connect(2,10,20.0);
         return g0;
     }
-
+    /**
+     * Generate a random graph with v_size nodes and e_size edges
+     * @param v_size
+     * @param e_size
+     * @param seed
+     * @return
+     */
     public static directed_weighted_graph graph_creator(int v_size, int e_size, int seed) {
         directed_weighted_graph g = new DWGraph_DS();
         _rnd = new Random(seed);

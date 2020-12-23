@@ -29,6 +29,9 @@ public class MyFrame extends JFrame{
 		super(a);
 		int _ind = 0;
 	}
+	/**
+	 * repaint the graph
+	 */
 	public void update(Arena ar) {
 		this._ar = ar;
 		updateFrame();
@@ -41,6 +44,7 @@ public class MyFrame extends JFrame{
 		directed_weighted_graph g = _ar.getGraph();
 		_w2f = Arena.w2f(g,frame);
 	}
+
 		public void paint(Graphics g) {
 		BufferedImage bufferedImage = new BufferedImage(2000, 1200, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g2d = bufferedImage.createGraphics();
@@ -66,15 +70,21 @@ public class MyFrame extends JFrame{
 		for(int i=0;i<str.size();i++) {
 			g.drawString(str.get(i)+" dt: "+dt,100,60+i*20);
 		}
-
 	}
+	/**
+	 * Draws the time left to finish the game.
+	 * @param g
+	 */
 	private void drawTimer(Graphics g) {
-
 		long dt = _ar.getTimer();
 		g.setColor(Color.yellow);
 		g.drawString("time to end: "+(int)dt/1000,50,50);
 
 	}
+	/**
+	 * Draws the graph.
+	 * @param g
+	 */
 	private void drawGraph(Graphics g) {
 		directed_weighted_graph gg = _ar.getGraph();
 		Iterator<node_data> iter = gg.getV().iterator();
@@ -90,7 +100,10 @@ public class MyFrame extends JFrame{
 			}
 		}
 	}
-
+	/**
+	 * Draws the Pokemon.
+	 * @param g
+	 */
 	private void drawPokemons(Graphics g) {
 		List<CL_Pokemon> fs = _ar.getPokemons();
 		if(fs!=null) {
@@ -112,7 +125,10 @@ public class MyFrame extends JFrame{
 				}
 			}
 		}}
-
+	/**
+	 * Draws the agent.
+	 * @param g
+	 */
 		private void drawAgants(Graphics g){
 			List<CL_Agent> rs = _ar.getAgents();
 			//	Iterator<OOP_Point3D> itr = rs.iterator();
@@ -130,12 +146,20 @@ public class MyFrame extends JFrame{
 				}
 			}
 		}
+	/**
+	 * Draws the vertices in the graph.
+	 * @param g
+	 */
 		private void drawNode(node_data n, int r, Graphics g) {
 			geo_location pos = n.getLocation();
 			geo_location fp = this._w2f.world2frame(pos);
 			g.fillOval((int)fp.x()-r, (int)fp.y()-r, 2*r, 2*r);
 			g.drawString(""+n.getKey(), (int)fp.x(), (int)fp.y()-4*r);
 		}
+	/**
+	 * DDraw the arcs in the graph.
+	 * @param g
+	 */
 		private void drawEdge(edge_data e, Graphics g) {
 			directed_weighted_graph gg = _ar.getGraph();
 			geo_location s = gg.getNode(e.getSrc()).getLocation();

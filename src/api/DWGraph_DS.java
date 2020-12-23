@@ -71,7 +71,7 @@ public DWGraph_DS(DWGraph_DS g) {
 	 */
 	@Override
 	public void connect(int src, int dest, double w) {
-		if(nodes.containsKey(src)&& nodes.containsKey(dest)) {
+		if(nodes.containsKey(src)&& nodes.containsKey(dest) && w>=0) {
 			if(go.get(src).get(dest)!=null){
 			edge_data goedge = new edgeData(this.nodes.get(src), this.nodes.get(dest), w);
 			go.get(src).put(dest, goedge);
