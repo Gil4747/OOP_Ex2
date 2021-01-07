@@ -385,4 +385,40 @@ public class DWGraph_Algo implements dw_graph_algorithms {
 			value.setTag(0);
 		});
 	}
+	public List<Integer> DFS1(directed_weighted_graph g,int s) {
+		node_data start = g.getNode(s);
+		// hashmap saves all nodes which visited by bfs algorithm
+		Map<Integer, node_data> visited = new HashMap<Integer, node_data>();
+		// queue of BFS
+		Stack<node_data> queue = new Stack<node_data>();
+		visited.put(start.getKey(), start);
+		queue.push(start);
+		while (queue.size() != 0) {
+			// take the first-added node, poll it from the queue, name it start and repeat the process
+			start = queue.pop();
+			//check all start node neighbours and add the unchecked nodes to the queue and the hashmap
+			for (edge_data n : g.getE(start.getKey())) {
+				if (!visited.containsKey(n.getDest())) {
+					visited.put(n.getDest(), g.getNode(n.getDest()));
+					queue.push(g.getNode(n.getDest()));
+				}
+			}
+		}
+		//returns the number of connected nodes
+		return (List<Integer>) visited.keySet();
+	}
+
+	public int connectivityParts(){
+		List<Integer> li = DFS1(graph,graph.getV().iterator().next().getKey());
+		int ans =0;
+		directed_weighted_graph g=transpose();
+		while (li.size()>0){
+			List<Integer> litg= DFS1(g,li.iterator().next());
+			li.removeAll(litg);
+			for (int i: litg){
+				g.removeNode(i);
+			}
+		}
+		return ans;
+	}
 }
